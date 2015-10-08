@@ -1,0 +1,152 @@
+{% extends 'grumblr/base.html' %}
+<body>
+{% block main %}
+    <div class="site-wrapper">
+
+        <div class="site-wrapper-inner">
+
+            <div class="cover-container">
+
+                <div class="masthead clearfix">
+                    <div class="inner">
+                        <h3 class="masthead-brand">Grumblr</h3>
+                        <nav>
+                            <ul class="nav masthead-nav">
+                                <li class="active"><a href="#">Home</a>
+                                </li>
+                                <li><a href="#">Explore</a>
+                                </li>
+                                <li><a href="#">Contact</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+
+                <div class="inner cover">
+                    {% if form.errors %}
+                    <div class="alert alert-warning">
+                        <strong>{{ form.non_field_errors.0 }}</strong>
+                    </div>
+                    {% endif %} {% if reset_email_form.errors %}
+                    <div class="alert alert-warning">
+                        <strong>{{ reset_email_form.non_field_errors.0 }}</strong>
+                    </div>
+                    {% endif %} {% if resetForm.errors %}
+                    <div class="alert alert-warning">
+                        <strong>{{ resetForm.non_field_errors.0 }}</strong>
+                    </div>
+                    {% endif %} {% if sucessful_edit %}
+                    <div class="alert alert-success">
+                        <strong>{{ sucessful_edit }}</strong>
+                    </div>
+                    {% endif %} {% if email_sent %}
+                    <div class="alert alert-success">
+                        <strong>{{ email_sent }}</strong>
+                    </div>
+                    {% endif %}
+                    <h1 class="cover-heading">Grumblr</h1>
+                    <p class="lead">Nanoblogging for everyone! </p>
+                    <p class="lead">
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#login_modal">Login</button>
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#sign_up_modal">Sign up</button>
+                    </p>
+                </div>
+
+                <!-- Modal -->
+                <div id="login_modal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Login</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="{% url 'Login' %}">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        {% for field in login_form.visible_fields %} {{field.label_tag}} {{field}} {% endfor %}
+                                    </div>
+                                    <button type="submit" class="btn btn-success">Login!</button>
+                                    <button type="submit" class="btn btn-info" data-toggle="modal" data-target="#forgot_password_modal" data-dismiss="modal">Forgot Username or Password?</button>
+                                    <button type="submit" class="btn btn-info" data-toggle="modal" data-target="#sign_up_modal" data-dismiss="modal">Sign Up!</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <div id="forgot_password_modal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Reset Your Password!</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="{% url 'resetPassword' %}">
+
+                                    <div class="form-group">
+                                        {% for field in reset_email_form.visible_fields %} {{field.label_tag}} {{field}} {% endfor %}
+                                    </div>
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success">Send email!</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- Modal -->
+                <div id="sign_up_modal" class="modal fade" role="dialog">
+
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+
+
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Sign Up for an Account</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="{% url 'Register' %}">
+                                    <div class="form-group">
+                                        {% for field in register_form.visible_fields %} {{field.label_tag}} {{field}} {% endfor %}
+                                    </div>
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success">Sign up!</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mastfoot">
+                    <div class="inner">
+                        <p>Cover template for <a href="http://getbootstrap.com">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    {% endblock %}
+</body>
+

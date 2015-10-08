@@ -1,0 +1,119 @@
+{% extends 'grumblr/base_interface.html' %}
+<body>
+{% block main %}
+
+    <div class="container-fluid">
+        <div class="col-xs-6 col-lg-4">
+            <div class="user_profile">
+                <br />
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        {% if user %}
+                        <div class="thumbnail">
+                            <img src="{% url 'getPhoto' user.id %}" alt="Need pic!" width="200">
+                            <div class="caption">
+                                <h3>{{user.first_name}} {{user.last_name}}</h3>
+                                <p>
+                                    {% if edit_user_form.errors %}
+                                    <span class="alert alert-danger pull-right">
+                                      <strong>{{ edit_user_form.non_field_errors.0 }}</strong> 
+                                      </span> {% endif %} {% if change_password_form.errors %}
+                                                                        <span class="alert alert-danger pull-right">
+                                      <strong>{{ change_password_form.non_field_errors.0 }}</strong> 
+                                      </span> {% endif %} Email: {{user.email}}
+                                    <br /> Age: {{age}}
+                                    <br /> Bio: {{bio}}
+                                    <br />
+                                </p>
+                                <p class="in-line">
+                                    {%if not just_viewing %}
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit_profile_modal">Edit Profile</button>
+                                    {% endif %}
+                                     {% if just_viewing %}
+                                    <form method="POST" action="{% url 'FollowUser' user.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary">Follow</button>
+                                    </form>
+                                    <form method="POST" action="{% url 'UnFollowUser' user.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary">Un Follow</button>
+                                    </form>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-lg-8">
+            <br />
+            <div class="recent_posts">
+            </div>
+            
+        <div id="edit_profile_modal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Edit Your Personal Information</h4>
+                        <h5 class="modal-sub-title"> &star; If you would like to erase a section, simply update value with a space </h5>
+                    </div>
+                    <div class="modal-body">
+                        <form enctype="multipart/form-data" method="POST" action="{% url 'editProfile' %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                {% for field in edit_user_form.visible_fields %} {{field.label_tag}} {{field}} {% endfor %}
+                            </div>
+                            <button type="submit" class="btn btn-success">Update Profile!</button>
+                            <button type="submit" class="btn btn-info" data-toggle="modal" data-target="#update_password_modal" data-dismiss="modal">Change Password</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="update_password_modal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Update Your Password</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="/change_password/">
+                            <div class="form-group">
+                                {% for field in change_password_form.visible_fields %} {{field.label_tag}} {{field}} {% endfor %}
+                            </div>
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success">Change Password</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+             {% endblock %}
+        </div>
+        </div>
+                         {% block profile-form %}    
+
+                                {% if user %}
+                                <span class="user"> Name: {{user.first_name}} {{user.last_name}} </span> {% endif %}
+                                <br />
+                                <span class="time_of_post">Time of Post: {{each_post.post_date}} </span>
+                                {% endblock %}
+
+
+</body>

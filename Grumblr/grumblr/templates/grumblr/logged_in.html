@@ -1,0 +1,64 @@
+{% extends 'grumblr/base_interface.html' %}
+<body>
+{% block main %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="text_to_post">
+                    <p>
+                        What is on your mind?
+                        <br /> Character limit of 42!
+                    </p>
+                    <form method="POST" action="{% url 'AddPost' %}" class="form-horizontal" id="post_form">
+                        {% csrf_token %} {% for field in add_entry_form.visible_fields %} {{field.label_tag}}
+                        <textarea class="form-control" form="post_form" rows="3" maxlength="42" name="post_content" style="width:100%"></textarea>
+                        {% endfor %}
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success pull-right" style="width:100%">Post !</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                {% if posts %}
+                <p>
+                    Global posts stream:
+                    <span class="pull-right"><a href="{% url 'followedFeeds' %}">Check Follower Stream </a></span>
+                </p>
+                {% else %}
+                <p>
+                    There are no posts yet! Why don't you start one!
+                </p>
+                {% endif %}
+
+                <div class="global_posts">
+                    {% if entryForm.errors %}
+                    <div class="row">
+                        <div class="jumbotron">
+                            <div class="user_post">
+                                <p>
+                                    Error: {{ entryForm.non_field_errors.0 }}
+                                    <br /> Click Here to try again:
+                                    <br />
+                                    <a class="navbar-brand" href="/home/">Grumblr</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %} 
+
+                   
+
+
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+          {% block profile-form %}
+                                    <span class="user"> Name: {{ each_post.user }}</span>
+                                    <br />
+                                    <span class="time_of_post">Time of Post: {{ each_post.post_date }} </span>
+                                    {% endblock %}
+</body>
